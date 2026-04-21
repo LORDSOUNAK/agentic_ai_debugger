@@ -1,0 +1,32 @@
+version: '3.5'
+
+services:
+  langfuse-server:
+    image: langfuse/langfuse:latest
+    depends_on:
+      - db
+    ports:
+      - "3010:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXTAUTH_URL=http://localhost:3010
+      - NEXTAUTH_SECRET=mysecret
+      - SALT=mysalt
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+      - LANGFUSE_INIT_PROJECT_ID=clp1234567890
+      - LANGFUSE_INIT_PROJECT_NAME=AgenticAIDebugger
+      - LANGFUSE_INIT_ORG_ID=org123
+      - LANGFUSE_INIT_USER_EMAIL=admin@example.com
+      - LANGFUSE_INIT_USER_PASSWORD=adminpassword
+      - TELEMETRY_ENABLED=false
+    restart: always
+
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "5433:5432"
